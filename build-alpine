@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+
+apk add --no-cache \
+    build-base \
+    cmake \
+    gcc \
+    musl-dev \
+    openssl-dev \
+    rustup
+
+rustup-init --default-toolchain stable --no-modify-path -y
+
+source $HOME/.cargo/env
+rustup target add x86_64-unknown-linux-musl
+
+cargo build --release --target x86_64-unknown-linux-musl

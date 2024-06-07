@@ -19,6 +19,7 @@ fn handler() -> Router {
 
     Router::new()
         .fallback_service(serve_dir)
+        .route("/acme/info", get(acme::info::handler))
         .route("/acme/list", get(acme::list::handler))
 }
 

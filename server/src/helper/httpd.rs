@@ -5,7 +5,7 @@ use std::fs::read_to_string;
 use tower_http::{services::ServeDir, trace::TraceLayer};
 
 pub async fn listen() {
-    let addr = "0.0.0.0:3000";
+    let addr = "0.0.0.0:7600";
     let router = handler().layer(TraceLayer::new_for_http());
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
 

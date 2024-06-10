@@ -37,9 +37,9 @@ fn parse_acme_list(output: &str) -> Result<Vec<serde_json::Value>, String> {
             return Err(format!("Invalid line format: {}", line));
         }
         let item = json!({
-            "Main_Domain": parts[0],
+            "MainDomain": parts[0],
             "KeyLength": parts[1],
-            "SAN_Domains": parts[2],
+            "SANDomains": parts[2],
             "CA": parts[3],
             "Created": parts[4],
             "Renew": parts[5],

@@ -1,8 +1,8 @@
-use acme_web::helper::httpd;
 use acme_web::helper::logger;
+use acme_web::helper::server;
 
 #[tokio::main]
 async fn main() {
     logger::init();
-    httpd::listen().await;
+    server::init().await;
 }

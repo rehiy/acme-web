@@ -41,8 +41,8 @@ async fn acme_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
     ws.on_upgrade(|mut socket: WebSocket| async move {
         while let Some(Ok(recv)) = socket.recv().await {
             let response = match recv {
-                Message::Text(text) => acme_app_route(&text),
-                _ => ws_error_message(1001, &"not supported"),
+                Message::Text(text) => acme_app_route(&text).await,
+                _ => ws_error_message(1001, &"Not Supported"),
             };
             if let Err(err) = socket.send(response).await {
                 tracing::warn!("{}", err);
@@ -52,9 +52,9 @@ async fn acme_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
     })
 }
 
-fn acme_app_route(text: &str) -> Message {
+async fn acme_app_route(text: &str) -> Message {
     match serde_json::from_str(text) {
-        Ok(payload) => match acme::app::route(&payload) {
+        Ok(payload) => match acme::app::route(&payload).await {
             Ok(data) => match serde_json::to_string(&data) {
                 Ok(body) => Message::Text(body.into()),
                 Err(err) => ws_error_message(1004, &err),

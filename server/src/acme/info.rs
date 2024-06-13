@@ -1,33 +1,25 @@
-use axum::http::StatusCode;
-use axum::response::{IntoResponse, Json as JsonResponse};
-use std::collections::HashMap;
+use serde_json::{json, Value};
 use tokio::process::Command;
 
-pub async fn handler() -> Result<(StatusCode, impl IntoResponse), (StatusCode, impl IntoResponse)> {
+pub async fn handler() -> Result<Value, String> {
     let mut acme = Command::new("acme.sh");
 
     match acme.arg("--info").output().await {
         Ok(output) => {
             if output.status.success() {
-                let stdout = String::from_utf8_lossy(&output.stdout).to_string();
-                match parse_acme_list(&stdout) {
-                    Ok(json) => Ok((StatusCode::OK, JsonResponse(json))),
-                    Err(err) => Err((StatusCode::INTERNAL_SERVER_ERROR, JsonResponse(err))),
-                }
+                let stdout = String::from_utf8_lossy(&output.stdout);
+                parse_acme_info(&stdout)
             } else {
-                let err = String::from_utf8_lossy(&output.stderr).to_string();
-                Err((StatusCode::INTERNAL_SERVER_ERROR, JsonResponse(err)))
+                let stderr = String::from_utf8_lossy(&output.stderr);
+                Err(stderr.to_string())
             }
         }
-        Err(e) => Err((
-            StatusCode::INTERNAL_SERVER_ERROR,
-            JsonResponse(e.to_string()),
-        )),
+        Err(e) => Err(e.to_string()),
     }
 }
 
-fn parse_acme_list(output: &str) -> Result<HashMap<String, String>, String> {
-    let mut items = HashMap::new();
+fn parse_acme_info(output: &str) -> Result<Value, String> {
+    let mut items = json!({});
     let mut lines = output.lines();
 
     lines.next();
@@ -38,9 +30,9 @@ fn parse_acme_list(output: &str) -> Result<HashMap<String, String>, String> {
         }
         let parts: Vec<&str> = line.splitn(2, '=').collect();
         if parts.len() == 2 {
-            let key = parts[0].trim();
-            let value = parts[1].trim().trim_matches('\'');
-            items.insert(key.to_string(), value.to_string());
+            let key = parts[0].trim().to_string();
+            let val = parts[1].trim().trim_matches('\'').to_string();
+            items[key] = serde_json::Value::String(val);
         }
     }
 

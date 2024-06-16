@@ -35,7 +35,7 @@ async fn sh_transfer(text: &str) -> Message {
 }
 
 fn error_message(code: u16, data: &dyn fmt::Display) -> Message {
-    tracing::error!("Websocket Error, Code={}, Message={}", code, data);
+    tracing::error!("Websocket backend error ({}): {}", code, data);
     let body = format!(r#"{{"code":{},"message":"{}"}}"#, code, data);
     Message::Text(body.into())
 }

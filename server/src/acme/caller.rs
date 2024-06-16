@@ -4,18 +4,18 @@ use tokio::process::Command;
 
 pub async fn apply(payload: &Value) -> Result<Value, String> {
     let mut cmd: Command = Command::new("acme.sh");
-    let args = json_to_args(payload).replace("--command ", "--");
+    let args = json_to_args(payload).replace("--action ", "--");
+    let action = payload.get("action").and_then(|c| c.as_str()).unwrap_or("");
 
     match cmd.arg(args).output().await {
         Ok(output) => {
             if output.status.success() {
                 let body = String::from_utf8_lossy(&output.stdout);
-                match payload.get("command").and_then(|c| c.as_str()) {
-                    Some("ping") => Ok(json!({"command": "pong"})),
-                    Some("info") => stdout::info(&body),
-                    Some("list") => stdout::list(&body),
-                    Some("issue") => stdout::issue(&body),
-                    _ => Err("Not Found Route".to_string()),
+                match action {
+                    "info" => stdout::info(&body),
+                    "list" => stdout::list(&body),
+                    "issue" => stdout::issue(&body),
+                    _ => Ok(json!({"stdout": body})),
                 }
             } else {
                 let stderr = String::from_utf8_lossy(&output.stderr);

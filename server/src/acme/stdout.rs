@@ -5,6 +5,8 @@ pub fn info(output: &str) -> Result<Value, String> {
     let mut lines = output.lines();
 
     lines.next();
+    items["action"] = "info".into();
+
     for mut line in lines {
         line = line.trim();
         if line.is_empty() || line.starts_with('#') {
@@ -42,26 +44,9 @@ pub fn list(output: &str) -> Result<Value, String> {
         items.push(item);
     }
 
-    Ok(serde_json::Value::Array(items))
+    Ok(json!({"action": "list", "items": items}))
 }
 
 pub fn issue(output: &str) -> Result<Value, String> {
-    let mut items = json!({});
-    let mut lines = output.lines();
-
-    lines.next();
-    for mut line in lines {
-        line = line.trim();
-        if line.is_empty() || line.starts_with('#') {
-            continue;
-        }
-        let parts: Vec<&str> = line.splitn(2, '=').collect();
-        if parts.len() == 2 {
-            let key = parts[0].trim().to_string();
-            let val = parts[1].trim().trim_matches('\'').to_string();
-            items[key] = serde_json::Value::String(val);
-        }
-    }
-
-    Ok(items)
+    Ok(json!({"action": "issue", "stdout": output}))
 }

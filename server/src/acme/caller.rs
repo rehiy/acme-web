@@ -3,11 +3,11 @@ use serde_json::{json, Value};
 use tokio::process::Command;
 
 pub async fn apply(payload: &Value) -> Result<Value, String> {
-    let mut cmd: Command = Command::new("acme.sh");
+    let mut acme: Command = Command::new("acme.sh");
     let args = json_to_args(payload).replace("--action ", "--");
     let action = payload.get("action").and_then(|c| c.as_str()).unwrap_or("");
 
-    match cmd.arg(args).output().await {
+    match acme.arg(args).output().await {
         Ok(output) => {
             if output.status.success() {
                 let body = String::from_utf8_lossy(&output.stdout);
@@ -15,7 +15,7 @@ pub async fn apply(payload: &Value) -> Result<Value, String> {
                     "info" => stdout::info(&body),
                     "list" => stdout::list(&body),
                     "issue" => stdout::issue(&body),
-                    _ => Ok(json!({"stdout": body})),
+                    _ => Ok(json!({"action": action, "stdout": body})),
                 }
             } else {
                 let stderr = String::from_utf8_lossy(&output.stderr);

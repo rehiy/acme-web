@@ -1,21 +1,28 @@
-export function acmeSocket(token: string) {
-    const url = location.origin.replace(/^http/, 'ws') + '/acme';
-    const wss = new WebSocket(url + (token ? '?token=' + token : ''));
-    wss.onopen = () => {
-        console.log('websocket is connected');
-        wss.send('{"command": "ping"}');
-    };
-    wss.onclose = () => {
-        console.log('websocket is closed, retry in 5s');
-        setTimeout(() => acmeSocket(token), 5 * 1000);
-    };
-    wss.onerror = (event) => {
-        console.log('websocket error, details to console', event);
-    };
-    wss.onmessage = (event) => {
-        console.log(event.data);
-    };
-    return wss;
+export class Acme {
+    wss!: WebSocket
+
+    constructor(token: string) {
+        this.connect(token);
+    }
+
+    connect(token: string) {
+        const url = location.origin.replace(/^http/, 'ws') + '/acme';
+        const wss = new WebSocket(url + (token ? '?token=' + token : ''));
+        wss.onopen = () => {
+            console.log('websocket is connected');
+            this.wss = wss;
+        };
+        wss.onclose = () => {
+            console.log('websocket is closed, retry in 5s');
+            setTimeout(() => this.connect(token), 5 * 1000);
+        };
+        wss.onerror = (event) => {
+            console.log('websocket error, details to console', event);
+        };
+        wss.onmessage = (event) => {
+            console.log(event.data);
+        };
+    }
 }
 
 export async function httpRequest(input: string, options: RequestInit = {}) {

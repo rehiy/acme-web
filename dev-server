@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+
+cd ~
+
+export PATH=$PATH:~/.acme.sh
+
+# setup dependencies
+
+if [ ! -x /usr/bin/curl ]; then
+    apk add openssl curl socat
+fi
+
+if [ ! -x ~/.acme.sh/acme.sh ]; then
+    curl https://get.acme.sh | sh -s email=acme@rehi.org
+    acme.sh --register-account --server letsencrypt
+    acme.sh --set-default-ca --server letsencrypt
+fi
+
+# -------------------------------------------------------
+
+export CF_Token="QxmhcuL_tOiuRqgDLhXqlc4haOiZyx6po3TK_f22"
+
+acme.sh --issue --dns dns_cf -d opentdp.org -d *.opentdp.org -d *.blackbox.opentdp.org
+
+cargo run

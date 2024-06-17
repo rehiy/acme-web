@@ -16,8 +16,8 @@ fi
 
 if [ ! -x ~/.acme.sh/acme.sh ]; then
     curl https://get.acme.sh | sh -s email=acme@rehi.org
-    acme.sh --register-account --server letsencrypt
-    acme.sh --set-default-ca --server letsencrypt
+    acme.sh --register-account --server letsencrypt_test
+    acme.sh --set-default-ca --server letsencrypt_test
 fi
 
 # -------------------------------------------------------

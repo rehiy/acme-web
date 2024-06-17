@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 
+# -------------------------------------------------------
 ## setup dependencies
 
 apk add --no-cache \
@@ -16,6 +17,7 @@ apk add --no-cache \
 rustup-init --default-toolchain stable --no-modify-path -y
 rustup target add x86_64-unknown-linux-musl
 
+# -------------------------------------------------------
 ## build acme webview
 
 cd /opt/webview
@@ -23,6 +25,7 @@ cd /opt/webview
 npm install
 npm run build
 
+# -------------------------------------------------------
 ## build acme server
 
 cd /opt/server

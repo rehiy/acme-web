@@ -1,7 +1,8 @@
 #!/bin/sh
 #
 
-cd /opt
+# -------------------------------------------------------
+# update env
 
 export PATH="$PATH:$HOME/.acme.sh"
 export PATH="$PATH:$HOME/.cargo/bin"
@@ -20,6 +21,6 @@ if [ ! -x ~/.acme.sh/acme.sh ]; then
 fi
 
 # -------------------------------------------------------
-# run dev server
+# start dev server
 
 cargo run

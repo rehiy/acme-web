@@ -1,6 +1,9 @@
 #!/bin/sh
 #
 
+set -e
+set -o noglob
+
 # -------------------------------------------------------
 ## setup dependencies
 

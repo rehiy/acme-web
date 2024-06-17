@@ -1,30 +1,35 @@
 use crate::acme;
-use axum::{handler::HandlerWithoutStateExt, http::StatusCode, routing::get, Router};
-use std::fs;
+use axum::{routing::post, Router};
+use serde_json::{json, Value};
 use tokio::net::TcpListener;
-use tower_http::{services::ServeDir, trace::TraceLayer};
+use tower_http::{
+    services::{ServeDir, ServeFile},
+    trace::TraceLayer,
+};
 
 pub async fn init() {
     let address = "0.0.0.0:7600";
     let listener = TcpListener::bind(address).await.unwrap();
 
-    let not_found = error_404.into_service();
-    let serve_dir = ServeDir::new("public").not_found_service(not_found);
+    let not_found = ServeFile::new("public/404.html");
+    let serve_dir = ServeDir::new("public").fallback(not_found);
 
     let service = Router::new()
         .fallback_service(serve_dir)
         .layer(TraceLayer::new_for_http())
-        .route("/acme", get(acme::websocket::handler));
+        .route("/acme", post(acme_handler));
 
     tracing::info!("listening on {}", address);
     axum::serve(listener, service).await.unwrap()
 }
 
-async fn error_404() -> (StatusCode, String) {
-    let content = match fs::read_to_string("public/404.html") {
-        Ok(html) => html,
-        Err(_) => String::from("404 Not Found"),
-    };
-
-    (StatusCode::NOT_FOUND, content)
+async fn acme_handler(payload: axum::Json<Value>) -> axum::Json<Value> {
+    match acme::runner::apply(&payload).await {
+        Ok(data) => axum::Json(data),
+        Err(err) => axum::Json(json!({
+            "Code": 1001,
+            "Message": err,
+            "Type": "error",
+        })),
+    }
 }

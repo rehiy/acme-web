@@ -1,10 +1,12 @@
 #!/bin/sh
 #
 
-cd ~
+cd /opt
 
-export PATH=$PATH:~/.acme.sh
+export PATH="$PATH:$HOME/.acme.sh"
+export PATH="$PATH:$HOME/.cargo/bin"
 
+# -------------------------------------------------------
 # setup dependencies
 
 if [ ! -x /usr/bin/curl ]; then
@@ -18,12 +20,6 @@ if [ ! -x ~/.acme.sh/acme.sh ]; then
 fi
 
 # -------------------------------------------------------
+# run dev server
 
-export CF_Token="QxmhcuL_tOiuRqgDLhXqlc4haOiZyx6po3TK_f22"
-
-acme.sh --issue --dns dns_cf -d opentdp.org -d *.opentdp.org -d *.blackbox.opentdp.org
-
-# -------------------------------------------------------
-
-. ~/.cargo/env
 cargo run

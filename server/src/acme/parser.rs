@@ -5,8 +5,6 @@ pub fn info(output: &str) -> Result<Value, String> {
     let mut lines = output.lines();
 
     lines.next();
-    items["action"] = "info".into();
-
     for mut line in lines {
         line = line.trim();
         if line.is_empty() || line.starts_with('#') {
@@ -44,9 +42,9 @@ pub fn list(output: &str) -> Result<Value, String> {
         items.push(item);
     }
 
-    Ok(json!({"action": "list", "items": items}))
+    Ok(json!(items))
 }
 
 pub fn issue(output: &str) -> Result<Value, String> {
-    Ok(json!({"action": "issue", "stdout": output}))
+    Ok(json!({"stdout": output}))
 }

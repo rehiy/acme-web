@@ -25,11 +25,8 @@ pub async fn init() {
 
 async fn acme_handler(payload: axum::Json<Value>) -> axum::Json<Value> {
     match acme::runner::apply(&payload).await {
-        Ok(data) => axum::Json(json!({
-            "Payload": data
-        })),
+        Ok(data) => axum::Json(data),
         Err(err) => axum::Json(json!({
-            "Code": 1001,
             "Message": err,
             "Type": "error",
         })),

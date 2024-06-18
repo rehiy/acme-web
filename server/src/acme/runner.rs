@@ -13,7 +13,7 @@ pub async fn apply(payload: &Value) -> Result<Value, String> {
                     "info" => parser::info(&resp),
                     "list" => parser::list(&resp),
                     "issue" => parser::issue(&resp),
-                    _ => Ok(json!({"stdout": resp})),
+                    _ => Ok(json!({"Stdout": resp})),
                 }
             } else {
                 let resp = String::from_utf8_lossy(&output.stderr);
@@ -33,7 +33,7 @@ fn build_acme_cli(payload: &Value) -> Command {
                 Value::Array(items) => {
                     for item in items {
                         if let Some(v) = item.as_str() {
-                            acme.arg(format!("--{} {}", key, v));
+                            acme.arg(format!("--{}", key)).arg(format!("{}", v));
                         }
                     }
                 }
@@ -46,16 +46,19 @@ fn build_acme_cli(payload: &Value) -> Command {
                             acme.env(k.replace("env_", ""), v);
                         }
                         _ => {
-                            acme.arg(format!("--{} {}", key, v));
+                            acme.arg(format!("--{}", key)).arg(format!("{}", v));
                         }
                     };
                 }
                 _ => {
-                    acme.arg(format!("--{} {}", key, val));
+                    acme.arg(format!("--{}", key)).arg(format!("{}", val));
                 }
             }
         }
     }
+
+    acme.env("NO_TIMESTAMP", "1");
+    tracing::info!("run command {:?}", acme.as_std());
 
     acme
 }

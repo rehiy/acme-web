@@ -1,29 +1,24 @@
 <layout-header></layout-header>
 
 <div class="page-fill container-xl pb-3">
-    <div class="main row g-3">
-
-        <div class="col-md-5 col-lg-4">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="bi bi-bootstrap-reboot"></i> 令牌
-                </div>
-                <form class="m-3" (ngSubmit)="submitForm()" #myform="ngForm">
-                    <div class="input-group">
-                        <input type="text" name="phrase" class="form-control" [(ngModel)]="formdata.token" />
-                        <button type="submit" class="btn btn-secondary" [disabled]="myform.invalid">确认</button>
-                    </div>
-                    <div class="form-text">
-                        若服务端设置了授权密钥，请在这里填写
-                    </div>
-                </form>
-            </div>
+    <div class="card" *ngIf="info">
+        <div class="card-header">
+            <i class="bi bi-activity"></i> 账号
         </div>
-
-        <div class="col-md-7 col-lg-8">
-            ...
-        </div>
-
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <b class="col-form-label">Account EMail</b>
+                <p class="my-2">{{info.ACCOUNT_EMAIL}}</p>
+            </li>
+            <li class="list-group-item">
+                <b class="col-form-label">Default Server</b>
+                <p class="my-2">{{info.DEFAULT_ACME_SERVER}}</p>
+            </li>
+            <li class="list-group-item">
+                <b class="col-form-label">Config Home</b>
+                <p class="my-2">{{info.LE_CONFIG_HOME}}</p>
+            </li>
+        </ul>
     </div>
 </div>
 

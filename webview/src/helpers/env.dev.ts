@@ -1,3 +1,3 @@
 export const Package = {
-    production: true,
+    production: false,
 };

@@ -14,18 +14,18 @@ export class AcmeAccountComponent {
 
     public info!: InfoResult;
 
-    public registerForm: RegisterAccountOptions = {
-        server: 'https://acme-v02.api.letsencrypt.org/directory',
-        'eab-kid': '',
-        'eab-hmac-key': '',
+    public setDefaultCAForm: SetDefaultCAOptions = {
+        server: '',
     };
 
-    public updateForm: UpdateAccountOptions = {
+    public updateAccountForm: UpdateAccountOptions = {
         email: '',
     };
 
-    public setDefaultCAForm: SetDefaultCAOptions = {
-        server: '',
+    public registerAccountForm: RegisterAccountOptions = {
+        server: 'https://acme-v02.api.letsencrypt.org/directory',
+        'eab-kid': '',
+        'eab-hmac-key': '',
     };
 
     constructor(
@@ -37,27 +37,27 @@ export class AcmeAccountComponent {
 
     public async getAcmeInfo() {
         this.info = await this.acme.info();
+        this.updateAccountForm.email = this.info.ACCOUNT_EMAIL;
+        this.setDefaultCAForm.server = this.info.DEFAULT_ACME_SERVER;
     }
 
-    public registerAccount() {
-        const opts = this.registerForm;
-        if (opts['eab-kid'] == '') {
-            delete opts['eab-kid'];
-            delete opts['eab-hmac-key'];
-        }
-        return this.acme.registerAccount(opts).then(() => {
+    public setDefaultCA() {
+        return this.acme.setDefaultCA(this.setDefaultCAForm).then(() => {
             this.router.navigate(['acme/account']);
         });
     }
 
     public updateAccount() {
-        return this.acme.updateAccount(this.updateForm).then(() => {
+        return this.acme.updateAccount(this.updateAccountForm).then(() => {
             this.router.navigate(['acme/account']);
         });
     }
 
-    public setDefaultCA() {
-        return this.acme.setDefaultCA(this.setDefaultCAForm).then(() => {
+    public registerAccount() {
+        const opts = this.registerAccountForm;
+        opts['eab-kid'] || delete opts['eab-kid'];
+        opts['eab-hmac-key'] || delete opts['eab-hmac-key'];
+        return this.acme.registerAccount(opts).then(() => {
             this.router.navigate(['acme/account']);
         });
     }

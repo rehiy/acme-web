@@ -8,7 +8,7 @@
         <form class="row gy-3 p-3" (ngSubmit)="updateAccount()" #myform1="ngForm">
             <div class="col-12">
                 <label class="form-label">注册邮箱 *</label>
-                <input type="email" name="eab-kid" class="form-control" [(ngModel)]="updateForm.email" required />
+                <input type="email" name="eab-kid" class="form-control" [(ngModel)]="updateAccountForm.email" required />
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary" [disabled]="myform1.invalid">更新</button>
@@ -42,7 +42,7 @@
         <form class="row gy-3 p-3" (ngSubmit)="registerAccount()" #myform3="ngForm">
             <div class="col-12">
                 <label class="form-label">签发机构 *</label>
-                <select name="server" class="form-select" [(ngModel)]="registerForm.server" required>
+                <select name="server" class="form-select" [(ngModel)]="registerAccountForm.server" required>
                     @for (item of caList | keyvalue; track item.key) {
                     <option [value]="item.value.url">{{item.value.name}}</option>
                     }
@@ -50,11 +50,11 @@
             </div>
             <div class="col-12">
                 <label class="form-label">账户 / EAB KID</label>
-                <input type="text" name="eab-kid" class="form-control" [(ngModel)]="registerForm['eab-kid']" />
+                <input type="text" name="eab-kid" class="form-control" [(ngModel)]="registerAccountForm['eab-kid']" />
             </div>
             <div class="col-12">
                 <label class="form-label">密钥 / EAB HMAC KEY</label>
-                <input type="text" name="eab-hmac-key" class="form-control" [(ngModel)]="registerForm['eab-hmac-key']" />
+                <input type="text" name="eab-hmac-key" class="form-control" [(ngModel)]="registerAccountForm['eab-hmac-key']" />
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary" [disabled]="myform3.invalid">确认</button>

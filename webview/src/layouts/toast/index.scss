@@ -1,0 +1,11 @@
+:host {
+    height: 100vh;
+    overflow-y: auto;
+}
+
+pre.stdout {
+    background-color: black;
+    color: white;
+    padding: 8px 12px;
+    margin: 0;
+}

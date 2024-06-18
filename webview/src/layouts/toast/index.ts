@@ -7,20 +7,17 @@ import { Component, HostBinding } from '@angular/core';
 })
 export class LayoutToastComponent {
 
+    public items: Toast[] = [];
+
     @HostBinding()
     public class = 'toast-container position-fixed top-0 end-0 p-3';
-
-    @HostBinding()
-    public style = 'z-index: 1200';
-
-    public items: Toast[] = [];
 
     constructor() {
         this.register();
     }
 
     public create(toast: Toast) {
-        toast.classname = `bg-${toast.classname || 'success'} text-light`;
+        toast.classname = `bg-${toast.type || 'success'} text-light`;
         this.items.push(toast);
     }
 
@@ -35,17 +32,18 @@ export class LayoutToastComponent {
     private register() {
         // 处理 js 异常
         window.onerror = (message) => {
-            this.create({ message: String(message), classname: 'danger' });
+            this.create({ type: 'danger', message: String(message) });
         };
         // 处理 promise 未捕获的 rejection
         window.addEventListener('unhandledrejection', e => {
-            this.create({ message: String(e.reason), classname: 'danger' });
+            this.create({ type: 'danger', message: String(e.reason) });
             e.preventDefault && e.preventDefault();
         });
         // 处理 postMessage 信息
         window.addEventListener('message', e => {
             if (e && e.data && e.data.type) {
-                this.create({ message: String(e.data.message), classname: e.data.type });
+                console.log(e.data);
+                this.create({ type: e.data.type, message: String(e.data.message) });
             }
         });
     }
@@ -53,7 +51,8 @@ export class LayoutToastComponent {
 }
 
 export interface Toast {
-    classname: string;
+    type: string;
     message: string;
+    classname?: string;
     delay?: number;
 }

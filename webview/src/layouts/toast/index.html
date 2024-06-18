@@ -1,9 +1,15 @@
 @for (item of items; track item) {
-@if (item.delay) {
+@if (item.type == 'stdout') {
+
+<ngb-toast [autohide]="false" header="标准输出" (hidden)="remove(item)">
+    <pre class="stdout">{{item.message}}</pre>
+</ngb-toast>
 
 } @else {
+
 <ngb-toast [class]="item.classname" [delay]="item.delay || 15000" [autohide]="true" (hidden)="remove(item)">
     {{item.message}}
 </ngb-toast>
+
 }
 }

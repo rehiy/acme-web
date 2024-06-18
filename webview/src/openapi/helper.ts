@@ -28,18 +28,18 @@ export class HttpClient {
             if (data.Type === 'error') {
                 throw new Error(data.Message);
             }
-            if (data.Stdout) {
-                window.postMessage({ message: data.Stdout, type: 'stdout' });
-            }
             if (data.Message) {
-                window.postMessage({ message: data.Message, type: 'success' });
+                postMessage({ message: data.Message, type: 'success' });
+            }
+            if (data.Stdout) {
+                postMessage({ message: data.Stdout, type: 'stdout' });
             }
             if (response.status < 200 || response.status > 400) {
                 throw new Error(response.statusText);
             }
             return data.Payload;
         } catch (error) {
-            window.postMessage({ message: error, type: 'danger' });
+            postMessage({ message: error, type: 'danger' });
             throw error;
         }
     }

@@ -24,11 +24,8 @@ export class HttpClient {
         try {
             const response = await fetch(input, options);
             const data = await response.json();
-            if (data.Error) {
-                if (data.Error.Message) {
-                    throw new Error(data.Error.Message);
-                }
-                throw data.Error;
+            if (data.Type === 'error') {
+                throw new Error(data.Message);
             }
             if (data.Message) {
                 window.postMessage({ message: data.Message, type: 'success' });

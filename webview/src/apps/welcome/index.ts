@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Acme, InfoResponse } from '../../openapi/acme';
+import { Acme, InfoResult } from '../../openapi/acme';
 
 
 @Component({
@@ -8,7 +8,7 @@ import { Acme, InfoResponse } from '../../openapi/acme';
     templateUrl: 'index.html'
 })
 export class WelcomeComponent {
-    public info!: InfoResponse;
+    public info!: InfoResult;
 
     constructor(private acme: Acme) {
         this.getAcmeInfo();

@@ -1,0 +1,66 @@
+<layout-header></layout-header>
+
+<div class="page-fill container-xl pb-3">
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="bi bi-envelope-at"></i> 默认注册邮箱
+        </div>
+        <form class="row gy-3 p-3" (ngSubmit)="updateAccount()" #myform1="ngForm">
+            <div class="col-12">
+                <label class="form-label">注册邮箱 *</label>
+                <input type="email" name="eab-kid" class="form-control" [(ngModel)]="updateForm.email" required />
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" [disabled]="myform1.invalid">更新</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="bi bi-cup-hot"></i> 默认签发机构
+        </div>
+        <form class="row gy-3 p-3" (ngSubmit)="setDefaultCA()" #myform2="ngForm">
+            <div class="col-12">
+                <label class="form-label">签发机构 *</label>
+                <select name="server" class="form-select" [(ngModel)]="setDefaultCAForm.server" required>
+                    @for (item of caList | keyvalue; track item.key) {
+                    <option [value]="item.value.url">{{item.value.name}}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" [disabled]="myform2.invalid">更新</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="bi bi-fingerprint"></i> 签发机构注册
+        </div>
+        <form class="row gy-3 p-3" (ngSubmit)="registerAccount()" #myform3="ngForm">
+            <div class="col-12">
+                <label class="form-label">签发机构 *</label>
+                <select name="server" class="form-select" [(ngModel)]="registerForm.server" required>
+                    @for (item of caList | keyvalue; track item.key) {
+                    <option [value]="item.value.url">{{item.value.name}}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <label class="form-label">账户 / EAB KID</label>
+                <input type="text" name="eab-kid" class="form-control" [(ngModel)]="registerForm['eab-kid']" />
+            </div>
+            <div class="col-12">
+                <label class="form-label">密钥 / EAB HMAC KEY</label>
+                <input type="text" name="eab-hmac-key" class="form-control" [(ngModel)]="registerForm['eab-hmac-key']" />
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" [disabled]="myform3.invalid">确认</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<layout-footer></layout-footer>

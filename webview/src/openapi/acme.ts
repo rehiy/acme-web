@@ -23,7 +23,7 @@ export class Acme extends HttpClient {
 
     // 账号相关接口
 
-    public info(): Promise<InfoResponse> {
+    public info(): Promise<InfoResult> {
         const data = { action: 'info' };
         return this.request('/acme', { body: JSON.stringify(data) });
     }
@@ -33,13 +33,13 @@ export class Acme extends HttpClient {
         return this.request('/acme', { body: JSON.stringify(data) });
     }
 
-    public updateAccount(email: string) {
-        const data = { action: 'update-account', email };
+    public updateAccount(opts: UpdateAccountOptions) {
+        const data = { action: 'update-account', ...opts };
         return this.request('/acme', { body: JSON.stringify(data) });
     }
 
-    public setDefaultCA(server: string) {
-        const data = { action: 'set-default-ca', server };
+    public setDefaultCA(opts: SetDefaultCAOptions) {
+        const data = { action: 'set-default-ca', ...opts };
         return this.request('/acme', { body: JSON.stringify(data) });
     }
 }
@@ -53,7 +53,7 @@ export interface IssueOptions {
     domain: Array<string>;
 }
 
-export interface InfoResponse {
+export interface InfoResult {
     ACCOUNT_EMAIL: string;
     DEFAULT_ACME_SERVER: string;
     LE_CONFIG_HOME: string;
@@ -61,6 +61,14 @@ export interface InfoResponse {
 
 export interface RegisterAccountOptions {
     server: string;
-    "eab-kid"?: string;
-    "eab-hmac-key"?: string;
+    'eab-kid'?: string;
+    'eab-hmac-key'?: string;
+}
+
+export interface UpdateAccountOptions {
+    email: string;
+}
+
+export interface SetDefaultCAOptions {
+    server: string;
 }

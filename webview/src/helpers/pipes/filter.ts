@@ -4,6 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
     name: 'filter'
 })
 export class FilterPipe implements PipeTransform {
+
     transform<T>(input: T[], filterBy: string, filterValue: string): T[] {
         if (!input || !filterBy || !filterValue) {
             return input;
@@ -22,4 +23,5 @@ export class FilterPipe implements PipeTransform {
             });
         });
     }
+
 }

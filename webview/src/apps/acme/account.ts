@@ -10,6 +10,7 @@ import { Acme, InfoResult, RegisterAccountOptions, UpdateAccountOptions, SetDefa
     templateUrl: 'account.html'
 })
 export class AcmeAccountComponent {
+
     public caList = CaList;
 
     public info!: InfoResult;

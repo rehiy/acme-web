@@ -7,6 +7,7 @@ import { HttpClient } from './helper';
     providedIn: 'root'
 })
 export class Acme extends HttpClient {
+
     constructor() {
         super();
     }
@@ -42,6 +43,7 @@ export class Acme extends HttpClient {
         const data = { action: 'set-default-ca', ...opts };
         return this.request('/acme', { body: JSON.stringify(data) });
     }
+
 }
 
 export interface KvData {

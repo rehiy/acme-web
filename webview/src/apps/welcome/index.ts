@@ -8,6 +8,7 @@ import { Acme, InfoResult } from '../../openapi/acme';
     templateUrl: 'index.html'
 })
 export class WelcomeComponent {
+
     public info!: InfoResult;
 
     constructor(private acme: Acme) {
@@ -17,4 +18,5 @@ export class WelcomeComponent {
     public async getAcmeInfo() {
         this.info = await this.acme.info();
     }
+
 }

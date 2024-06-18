@@ -1,5 +1,9 @@
-@for (toast of items; track toast) {
-<ngb-toast [class]="toast.classname" [delay]="toast.delay || 15000" [autohide]="true" (hidden)="remove(toast)">
-    {{toast.message}}
+@for (item of items; track item) {
+@if (item.delay) {
+
+} @else {
+<ngb-toast [class]="item.classname" [delay]="item.delay || 15000" [autohide]="true" (hidden)="remove(item)">
+    {{item.message}}
 </ngb-toast>
+}
 }

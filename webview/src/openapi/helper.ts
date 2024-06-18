@@ -1,4 +1,5 @@
 export class HttpClient {
+
     /**
      * 请求远程服务器
      * @param input string 请求的url路径
@@ -27,6 +28,9 @@ export class HttpClient {
             if (data.Type === 'error') {
                 throw new Error(data.Message);
             }
+            if (data.Stdout) {
+                window.postMessage({ message: data.Stdout, type: 'stdout' });
+            }
             if (data.Message) {
                 window.postMessage({ message: data.Message, type: 'success' });
             }
@@ -39,4 +43,5 @@ export class HttpClient {
             throw error;
         }
     }
+
 }

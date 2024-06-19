@@ -24,10 +24,10 @@ pub async fn init() {
 }
 
 async fn acme_handler(payload: axum::Json<Value>) -> axum::Json<Value> {
-    match acme::runner::apply(&payload).await {
+    match acme::action::apply(&payload).await {
         Ok(data) => axum::Json(data),
         Err(err) => axum::Json(json!({
-            "Message": err,
+            "Message": err.to_string(),
             "Type": "error",
         })),
     }

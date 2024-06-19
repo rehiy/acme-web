@@ -1,8 +1,9 @@
 use serde_json::{json, Value};
+use std::error::Error;
 
 // cert
 
-pub fn list(output: &str) -> Result<Value, String> {
+pub fn list(output: &str) -> Result<Value, Box<dyn Error>> {
     let mut items = Vec::new();
     let mut lines = output.lines();
 
@@ -10,7 +11,7 @@ pub fn list(output: &str) -> Result<Value, String> {
     for line in lines {
         let parts: Vec<&str> = line.split('\t').collect();
         if parts.len() < 6 {
-            return Err(format!("Invalid line format: {}", line));
+            return Err(format!("Invalid line format: {}", line).into());
         }
         let item = json!({
             "MainDomain": parts[0],
@@ -26,13 +27,13 @@ pub fn list(output: &str) -> Result<Value, String> {
     Ok(json!({"Payload": items}))
 }
 
-pub fn issue(output: &str) -> Result<Value, String> {
+pub fn issue(output: &str) -> Result<Value, Box<dyn Error>> {
     Ok(json!({"Stdout": output}))
 }
 
 // account
 
-pub fn info(output: &str) -> Result<Value, String> {
+pub fn info(output: &str) -> Result<Value, Box<dyn Error>> {
     let mut items = json!({});
     let mut lines = output.lines();
 

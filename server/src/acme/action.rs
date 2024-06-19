@@ -1,30 +1,35 @@
-use super::parser;
+use super::{helper, parser};
 use serde_json::{json, Value};
+use std::error::Error;
 use tokio::process::Command;
 
-pub async fn apply(payload: &Value) -> Result<Value, String> {
+pub async fn apply(payload: &Value) -> Result<Value, Box<dyn Error>> {
     let act = payload["action"].as_str().unwrap_or("");
 
-    match build_acme_cli(payload).output().await {
-        Ok(output) => {
-            if output.status.success() {
-                let resp = String::from_utf8_lossy(&output.stdout);
-                match act {
-                    "info" => parser::info(&resp),
-                    "list" => parser::list(&resp),
-                    "issue" => parser::issue(&resp),
-                    _ => Ok(json!({"Stdout": resp})),
-                }
-            } else {
-                let resp = String::from_utf8_lossy(&output.stderr);
-                Err(resp.to_string())
-            }
-        }
-        Err(err) => Err(err.to_string()),
+    match act {
+        "ca-account" => helper::ca_account(),
+        _ => acme_sh(act, payload).await,
     }
 }
 
-fn build_acme_cli(payload: &Value) -> Command {
+async fn acme_sh(act: &str, payload: &Value) -> Result<Value, Box<dyn Error>> {
+    let output = acme_sh_builder(payload).output().await?;
+
+    if output.status.success() {
+        let resp = String::from_utf8_lossy(&output.stdout);
+        return match act {
+            "info" => parser::info(&resp),
+            "list" => parser::list(&resp),
+            "issue" => parser::issue(&resp),
+            _ => Ok(json!({"Stdout": resp})),
+        };
+    } else {
+        let resp = String::from_utf8_lossy(&output.stderr);
+        return Err(resp.into());
+    }
+}
+
+fn acme_sh_builder(payload: &Value) -> Command {
     let mut acme = Command::new("acme.sh");
 
     if let Some(obj) = payload.as_object() {
@@ -60,5 +65,5 @@ fn build_acme_cli(payload: &Value) -> Command {
     acme.env("NO_TIMESTAMP", "1");
     tracing::info!("run command {:?}", acme.as_std());
 
-    acme
+    return acme;
 }

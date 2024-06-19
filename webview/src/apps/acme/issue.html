@@ -14,6 +14,7 @@
             <label class="form-label">域名列表 *</label>
             <textarea name="domain" class="form-control" [(ngModel)]="issueForm.domain[0]" rows="3" required></textarea>
         </div>
+        @if (dnsList) {
         <div class="col-12">
             <label class="form-label">DNS 服务商 *</label>
             <select name="dns" class="form-select" [(ngModel)]="issueForm.dns" required>
@@ -22,12 +23,13 @@
                 }
             </select>
         </div>
-        @if (issueForm.dns && dnsList[issueForm.dns].length > 0) {
+        @if (dnsList[issueForm.dns].length) {
         @for (ekey of dnsList[issueForm.dns]; track ekey) {
         <div class="col-12">
             <label class="form-label">DNS.{{ekey}} *</label>
             <input type="text" [name]="ekey" class="form-control" [(ngModel)]="issueForm.env[ekey]" required />
         </div>
+        }
         }
         }
         <div class="col-12">

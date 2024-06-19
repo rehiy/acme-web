@@ -15,7 +15,7 @@ export class AcmeIssueComponent {
     public dnsList!: DnsProvider;
 
     public issueForm: IssueOptions = {
-        dns: '',
+        dns: 'dns_tencent',
         domain: [''],
         server: 'https://acme-v02.api.letsencrypt.org/directory',
         env: {},

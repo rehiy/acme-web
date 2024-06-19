@@ -43,18 +43,21 @@ fn acme_sh_builder(payload: &Value) -> Command {
                         }
                     }
                 }
+                Value::Object(obj) => {
+                    for (k, v) in obj.iter() {
+                        if key == "env" {
+                            acme.env(k, format!("{}", v));
+                        } else {
+                            acme.arg(format!("--{}", k)).arg(format!("{}", v));
+                        }
+                    }
+                }
                 Value::String(v) => {
-                    match key.as_str() {
-                        "action" => {
-                            acme.arg(format!("--{}", v));
-                        }
-                        k if k.starts_with("env") => {
-                            acme.env(k.replace("env_", ""), v);
-                        }
-                        _ => {
-                            acme.arg(format!("--{}", key)).arg(format!("{}", v));
-                        }
-                    };
+                    if key == "action" {
+                        acme.arg(format!("--{}", v));
+                    } else {
+                        acme.arg(format!("--{}", key)).arg(format!("{}", v));
+                    }
                 }
                 _ => {
                     acme.arg(format!("--{}", key)).arg(format!("{}", val));

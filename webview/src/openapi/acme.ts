@@ -12,6 +12,8 @@ export class Acme extends HttpClient {
         super();
     }
 
+    // 证书接口
+
     public list() {
         const data = { action: 'list' };
         return this.request('/acme', { body: JSON.stringify(data) });
@@ -26,11 +28,6 @@ export class Acme extends HttpClient {
 
     public info(): Promise<AcmeInfo> {
         const data = { action: 'info' };
-        return this.request('/acme', { body: JSON.stringify(data) });
-    }
-
-    public caAccount(): Promise<CaAccount[]> {
-        const data = { action: 'ca-account' };
         return this.request('/acme', { body: JSON.stringify(data) });
     }
 
@@ -49,29 +46,35 @@ export class Acme extends HttpClient {
         return this.request('/acme', { body: JSON.stringify(data) });
     }
 
+    // 扩展数据接口
+
+    public caAccount(): Promise<CaAccount[]> {
+        const data = { action: 'ca-account' };
+        return this.request('/acme', { body: JSON.stringify(data) });
+    }
+
+    public dnsProvider(): Promise<DnsProvider> {
+        const data = { action: 'dns-provider' };
+        return this.request('/acme', { body: JSON.stringify(data) });
+    }
+
 }
 
-export interface KvData {
-    [key: string]: string;
-}
+// 证书数据类型
 
 export interface IssueOptions {
     dns: string;
     domain: Array<string>;
+    server: string;
+    env: Record<string, string>;
 }
+
+// 账号相关类型
 
 export interface AcmeInfo {
     ACCOUNT_EMAIL: string;
     DEFAULT_ACME_SERVER: string;
     LE_CONFIG_HOME: string;
-}
-
-export interface CaAccount {
-    ACCOUNT_URL: string;
-    CA_EAB_KEY_ID?: string;
-    CA_EAB_HMAC_KEY?: string;
-    CA_EMAIL: string;
-    CA_KEY_HASH: string;
 }
 
 export interface RegisterAccountOptions {
@@ -86,4 +89,18 @@ export interface UpdateAccountOptions {
 
 export interface SetDefaultCAOptions {
     server: string;
+}
+
+// 扩展数据类型
+
+export interface CaAccount {
+    ACCOUNT_URL: string;
+    CA_EAB_KEY_ID?: string;
+    CA_EAB_HMAC_KEY?: string;
+    CA_EMAIL: string;
+    CA_KEY_HASH: string;
+}
+
+export interface DnsProvider {
+    [key: string]: Array<string>;
 }

@@ -42,7 +42,6 @@ export class LayoutToastComponent {
         // 处理 postMessage 信息
         window.addEventListener('message', e => {
             if (e && e.data && e.data.type) {
-                console.log(e.data);
                 this.create({ type: e.data.type, message: String(e.data.message) });
             }
         });

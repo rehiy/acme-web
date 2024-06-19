@@ -1,0 +1,39 @@
+<layout-header></layout-header>
+
+<div class="page-fill container-xl pb-3">
+    <form class="row gy-3 p-3" (ngSubmit)="issue()" #myform1="ngForm">
+        <div class="col-12">
+            <label class="form-label">签发机构 *</label>
+            <select name="server" class="form-select" [(ngModel)]="issueForm.server" required>
+                @for (item of caList | keyvalue; track item.key) {
+                <option [value]="item.value.url">{{item.value.name}}</option>
+                }
+            </select>
+        </div>
+        <div class="col-12">
+            <label class="form-label">域名列表 *</label>
+            <textarea name="domain" class="form-control" [(ngModel)]="issueForm.domain[0]" rows="3" required></textarea>
+        </div>
+        <div class="col-12">
+            <label class="form-label">DNS 服务商 *</label>
+            <select name="dns" class="form-select" [(ngModel)]="issueForm.dns" required>
+                @for (item of dnsList | keyvalue; track item.key) {
+                <option [value]="item.key">{{item.key}}</option>
+                }
+            </select>
+        </div>
+        @if (issueForm.dns && dnsList[issueForm.dns].length > 0) {
+        @for (ekey of dnsList[issueForm.dns]; track ekey) {
+        <div class="col-12">
+            <label class="form-label">DNS.{{ekey}} *</label>
+            <input type="text" [name]="ekey" class="form-control" [(ngModel)]="issueForm.env[ekey]" required />
+        </div>
+        }
+        }
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary" [disabled]="myform1.invalid">确定</button>
+        </div>
+    </form>
+</div>
+
+<layout-footer></layout-footer>

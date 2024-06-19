@@ -24,7 +24,6 @@ export class WelcomeComponent {
 
     public async getCaAccount() {
         this.caAccounts = await this.acme.caAccount();
-        console.log(this.caAccounts);
     }
 
 }

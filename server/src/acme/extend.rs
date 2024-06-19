@@ -7,12 +7,12 @@ use std::{error::Error, fs, path::PathBuf};
 pub fn ca_account() -> Result<Value, Box<dyn Error>> {
     let mut items = Vec::new();
 
-    let fp = "~/.acme.sh/ca/**/ca.conf";
+    let fp = "/root/.acme.sh/ca/**/ca.conf";
     for entry in glob(&fp)? {
         items.push(parse_ca_conf(&entry?)?);
     }
 
-    Ok(json!(items))
+    Ok(json!({"Payload": items}))
 }
 
 fn parse_ca_conf(pb: &PathBuf) -> Result<Value, Box<dyn Error>> {

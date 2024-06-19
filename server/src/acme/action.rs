@@ -1,4 +1,4 @@
-use super::{helper, parser};
+use super::{extend, parser};
 use serde_json::{json, Value};
 use std::error::Error;
 use tokio::process::Command;
@@ -7,7 +7,7 @@ pub async fn apply(payload: &Value) -> Result<Value, Box<dyn Error>> {
     let act = payload["action"].as_str().unwrap_or("");
 
     match act {
-        "ca-account" => helper::ca_account(),
+        "ca-account" => extend::ca_account(),
         _ => acme_sh(act, payload).await,
     }
 }

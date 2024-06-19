@@ -24,8 +24,13 @@ export class Acme extends HttpClient {
 
     // 账号相关接口
 
-    public info(): Promise<InfoResult> {
+    public info(): Promise<AcmeInfo> {
         const data = { action: 'info' };
+        return this.request('/acme', { body: JSON.stringify(data) });
+    }
+
+    public caAccount(): Promise<CaAccount[]> {
+        const data = { action: 'ca-account' };
         return this.request('/acme', { body: JSON.stringify(data) });
     }
 
@@ -55,10 +60,18 @@ export interface IssueOptions {
     domain: Array<string>;
 }
 
-export interface InfoResult {
+export interface AcmeInfo {
     ACCOUNT_EMAIL: string;
     DEFAULT_ACME_SERVER: string;
     LE_CONFIG_HOME: string;
+}
+
+export interface CaAccount {
+    ACCOUNT_URL: string;
+    CA_EAB_KEY_ID?: string;
+    CA_EAB_HMAC_KEY?: string;
+    CA_EMAIL: string;
+    CA_KEY_HASH: string;
 }
 
 export interface RegisterAccountOptions {

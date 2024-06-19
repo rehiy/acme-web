@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { Acme, InfoResult } from '../../openapi/acme';
+import { Acme, AcmeInfo, CaAccount } from '../../openapi/acme';
 
 
 @Component({
@@ -9,14 +9,22 @@ import { Acme, InfoResult } from '../../openapi/acme';
 })
 export class WelcomeComponent {
 
-    public info!: InfoResult;
+    public info!: AcmeInfo;
+
+    public caAccounts!: CaAccount[];
 
     constructor(private acme: Acme) {
         this.getAcmeInfo();
+        this.getCaAccount();
     }
 
     public async getAcmeInfo() {
         this.info = await this.acme.info();
+    }
+
+    public async getCaAccount() {
+        this.caAccounts = await this.acme.caAccount();
+        console.log(this.caAccounts);
     }
 
 }

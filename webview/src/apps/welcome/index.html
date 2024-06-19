@@ -1,9 +1,9 @@
 <layout-header></layout-header>
 
 <div class="page-fill container-xl pb-3">
-    <div class="card" *ngIf="info">
+    <div class="card mb-3" *ngIf="info">
         <div class="card-header">
-            <i class="bi bi-activity"></i> 账号
+            <i class="bi bi-activity"></i> 概要
         </div>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -20,6 +20,25 @@
             </li>
         </ul>
     </div>
+
+    <table class="table table-hover align-middle" *ngIf="caAccounts?.length">
+        <thead class="table-light">
+            <tr>
+                <th scope="col">签发机构 URL</th>
+                <th scope="col">EMAIL</th>
+                <th scope="col">KEY HASH</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of caAccounts; track item.ACCOUNT_URL) {
+            <tr>
+                <th scope="row">{{item.ACCOUNT_URL}}</th>
+                <th scope="row">{{item.CA_EMAIL}}</th>
+                <th scope="row">{{item.CA_KEY_HASH}}</th>
+            </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 <layout-footer></layout-footer>

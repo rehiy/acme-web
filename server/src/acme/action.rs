@@ -8,6 +8,7 @@ pub async fn apply(payload: &Value) -> Result<Value, Box<dyn Error>> {
 
     match act {
         "ca-account" => extend::ca_account(),
+        "dns-provider" => extend::dns_provider(),
         _ => acme_sh(act, payload).await,
     }
 }

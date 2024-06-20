@@ -5,6 +5,7 @@ import { Error404Component } from './message/404';
 
 import { AcmeAccountComponent } from './acme/account';
 import { AcmeIssueComponent } from './acme/issue';
+import { AcmeListComponent } from './acme/list';
 
 
 export const AppComponents = [
@@ -13,6 +14,7 @@ export const AppComponents = [
 
     AcmeAccountComponent,
     AcmeIssueComponent,
+    AcmeListComponent,
 
 ];
 
@@ -25,6 +27,7 @@ export const AppRoutes: Routes = [
 
     { path: 'acme/account', component: AcmeAccountComponent },
     { path: 'acme/issue', component: AcmeIssueComponent },
+    { path: 'acme/list', component: AcmeListComponent },
 
 
     { path: '', redirectTo: 'welcome', pathMatch: 'full' },

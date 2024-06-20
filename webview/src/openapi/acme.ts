@@ -14,7 +14,7 @@ export class Acme extends HttpClient {
 
     // 证书接口
 
-    public list() {
+    public list(): Promise<CertItem[]> {
         const body = JSON.stringify({});
         return this.request('/acme/list', { body });
     }
@@ -61,6 +61,15 @@ export class Acme extends HttpClient {
 }
 
 // 证书数据类型
+
+export interface CertItem {
+    CA: string;
+    Created: string;
+    KeyLength: string;
+    MainDomain: string;
+    Renew: string;
+    SANDomains: string;
+}
 
 export interface IssueOptions {
     dns: string;

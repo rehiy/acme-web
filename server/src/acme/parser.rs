@@ -10,18 +10,17 @@ pub fn list(output: &str) -> Result<Value, Box<dyn Error>> {
     lines.next();
     for line in lines {
         let parts: Vec<&str> = line.split('\t').collect();
-        if parts.len() < 6 {
-            return Err(format!("Invalid line format: {}", line).into());
+        if parts.len() >= 6 {
+            let item = json!({
+                "MainDomain": parts[0],
+                "KeyLength": parts[1],
+                "SANDomains": parts[2],
+                "CA": parts[3],
+                "Created": parts[4],
+                "Renew": parts[5],
+            });
+            items.push(item);
         }
-        let item = json!({
-            "MainDomain": parts[0],
-            "KeyLength": parts[1],
-            "SANDomains": parts[2],
-            "CA": parts[3],
-            "Created": parts[4],
-            "Renew": parts[5],
-        });
-        items.push(item);
     }
 
     Ok(json!({"Payload": items}))

@@ -1,5 +1,5 @@
 use crate::acme;
-use axum::{routing::post, Router};
+use axum::{extract::Path, routing::post, Router};
 use serde_json::{json, Value};
 use tokio::net::TcpListener;
 use tower_http::{
@@ -17,14 +17,14 @@ pub async fn init() {
     let service = Router::new()
         .fallback_service(serve_dir)
         .layer(TraceLayer::new_for_http())
-        .route("/acme", post(acme_handler));
+        .route("/acme/:act", post(acme_handler));
 
     tracing::info!("listening on {}", address);
     axum::serve(listener, service).await.unwrap()
 }
 
-async fn acme_handler(payload: axum::Json<Value>) -> axum::Json<Value> {
-    match acme::action::apply(&payload).await {
+async fn acme_handler(act: Path<String>, body: axum::Json<Value>) -> axum::Json<Value> {
+    match acme::action::apply(&act, &body).await {
         Ok(data) => axum::Json(data),
         Err(err) => axum::Json(json!({
             "Message": err.to_string(),
